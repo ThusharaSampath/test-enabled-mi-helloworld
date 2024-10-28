@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.microintegrator.projects</groupId>
   <artifactId>helloworld</artifactId>
@@ -10,36 +9,36 @@
   <description>helloworld</description>
   <repositories>
     <repository>
-        <id>wso2-nexus</id>
-        <name>WSO2 internal Repository</name>
-        <url>https://maven.wso2.org/nexus/content/groups/wso2-public/</url>
-        <releases>
-          <enabled>true</enabled>
-          <updatePolicy>daily</updatePolicy>
-          <checksumPolicy>ignore</checksumPolicy>
-        </releases>
+      <id>wso2-nexus</id>
+      <name>WSO2 internal Repository</name>
+      <url>https://maven.wso2.org/nexus/content/groups/wso2-public/</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>daily</updatePolicy>
+        <checksumPolicy>ignore</checksumPolicy>
+      </releases>
     </repository>
     <repository>
-        <id>wso2.releases</id>
-        <name>WSO2 internal Repository</name>
-        <url>https://maven.wso2.org/nexus/content/repositories/releases/</url>
-        <releases>
-          <enabled>true</enabled>
-          <updatePolicy>daily</updatePolicy>
-          <checksumPolicy>ignore</checksumPolicy>
-        </releases>
+      <id>wso2.releases</id>
+      <name>WSO2 internal Repository</name>
+      <url>https://maven.wso2.org/nexus/content/repositories/releases/</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>daily</updatePolicy>
+        <checksumPolicy>ignore</checksumPolicy>
+      </releases>
     </repository>
     <repository>
-        <id>wso2.snapshots</id>
-        <name>Apache Snapshot Repository</name>
-        <url>https://maven.wso2.org/nexus/content/repositories/snapshots/</url>
-        <snapshots>
-          <enabled>true</enabled>
-          <updatePolicy>daily</updatePolicy>
-        </snapshots>
-        <releases>
-          <enabled>false</enabled>
-        </releases>
+      <id>wso2.snapshots</id>
+      <name>Apache Snapshot Repository</name>
+      <url>https://maven.wso2.org/nexus/content/repositories/snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>daily</updatePolicy>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
     </repository>
   </repositories>
   <pluginRepositories>
@@ -104,7 +103,7 @@
           <plugin>
             <groupId>org.wso2.maven</groupId>
             <artifactId>vscode-car-plugin</artifactId>
-            <version>5.2.65</version>
+            <version>5.2.68</version>
             <extensions>true</extensions>
             <executions>
               <execution>
@@ -139,64 +138,33 @@
               </execution>
             </executions>
           </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <version>3.1.0</version>
-            <executions>
-              <execution>
-                <id>setup-env</id>
-                <phase>generate-test-resources</phase>
-                <goals>
-                  <goal>run</goal>
-                </goals>
-                <configuration>
-                  <target>
-                    <mkdir dir="${local.mi.pack.store.path}" />
-                    <get src="${mi.pack.download.link}"
-                       dest="${local.mi.pack.store.path}"/>
-                    <unzip src="${local.mi.pack.store.path}/${mi.pack}.zip" dest="${local.mi.pack.store.path}" />
-                    <copy todir="${local.mi.pack.store.path}/${mi.pack}/lib">
-                      <fileset dir="${basedir}/deployment/libs"/>
-                    </copy>
-                    <exec executable="chmod">
-                      <arg value="+x"/>
-                      <arg value="${local.mi.pack.store.path}/${mi.pack}/bin/micro-integrator.sh"/>
-                    </exec>
-                  </target>
-                  <skip>${maven.test.skip}</skip>
-                </configuration>
-              </execution>
-              <execution>
-                <id>delete-folder</id>
-                <phase>post-integration-test</phase>
-                <configuration>
-                  <target>
-                    <delete dir="${local.mi.pack.store.path}" />
-                  </target>
-                  <skip>${maven.test.skip}</skip>
-                </configuration>
-                <goals>
-                  <goal>run</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
         </plugins>
       </build>
       <properties>
         <server.type>local</server.type>
         <server.host>localhost</server.host>
         <server.port>9008</server.port>
-        <server.path>${local.mi.pack.store.path}/${mi.pack}/bin/micro-integrator.sh</server.path>
+        <server.path>/</server.path>
+        <server.version>${project.runtime.version}</server.version>
+        <server.download.link>${testServerDownloadLink}</server.download.link>
+      </properties>
+    </profile>
+    <profile>
+      <id>test</id>
+      <build/>
+      <properties>
+        <server.type>${testServerType}</server.type>
+        <server.host>${testServerHost}</server.host>
+        <server.port>${testServerPort}</server.port>
+        <server.path>${testServerPath}</server.path>
       </properties>
     </profile>
     <profile>
       <id>docker</id>
       <build>
         <plugins>
-            <!-- Compile and build the class mediator jars -->
-            <plugin>
+          <!-- Compile and build the class mediator jars -->
+          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
             <executions>
@@ -230,7 +198,7 @@
           <plugin>
             <groupId>org.wso2.maven</groupId>
             <artifactId>vscode-car-plugin</artifactId>
-            <version>5.2.65</version>
+            <version>5.2.68</version>
             <extensions>true</extensions>
             <executions>
               <execution>
@@ -266,7 +234,7 @@
           <plugin>
             <groupId>org.wso2.maven</groupId>
             <artifactId>mi-container-config-mapper</artifactId>
-            <version>5.2.65</version>
+            <version>5.2.68</version>
             <extensions>true</extensions>
             <executions>
               <execution>
@@ -276,7 +244,7 @@
                   <goal>config-mapper-parser</goal>
                 </goals>
                 <configuration>
-                  <miVersion>4.3.0</miVersion>
+                  <miVersion>${project.runtime.version}</miVersion>
                   <executeCipherTool>${ciphertool.enable}</executeCipherTool>
                   <keystoreName>${keystore.name}</keystoreName>
                   <keystoreAlias>${keystore.alias}</keystoreAlias>
@@ -306,13 +274,6 @@
                         <include name="*.car"/>
                       </fileset>
                     </copy>
-                    <move todir="${basedir}/target/tmp_docker/CarbonHome/metadata">
-                      <fileset dir="${basedir}/target/tmp_docker/CarbonHome/.metadata"/>
-                    </move>
-                    <replace file="${basedir}/target/tmp_docker/Dockerfile">
-                      <replacefilter token="CarbonHome/.metadata/metadata_config.properties" value="CarbonHome/metadata/metadata_config.properties"/>
-                      <replacefilter token="CarbonHome/.metadata/references.properties" value="CarbonHome/metadata/references.properties"/>
-                    </replace>
                   </target>
                 </configuration>
               </execution>
@@ -323,12 +284,12 @@
           <plugin>
             <groupId>io.fabric8</groupId>
             <artifactId>docker-maven-plugin</artifactId>
-            <version>0.43.4</version>
+            <version>0.45.0</version>
             <extensions>true</extensions>
             <executions>
               <execution>
                 <id>docker-build</id>
-                <phase>compile</phase>
+                <phase>package</phase>
                 <goals>
                   <goal>build</goal>
                 </goals>
@@ -342,6 +303,7 @@
                         <args>
                           <BASE_IMAGE>${dockerfile.base.image}</BASE_IMAGE>
                         </args>
+                        <useDefaultExcludes>false</useDefaultExcludes>
                       </build>
                     </image>
                   </images>
@@ -352,84 +314,18 @@
                   <verbose>true</verbose>
                 </configuration>
               </execution>
-              <execution>
-                <id>docker-start</id>
-                <phase>generate-test-resources</phase>
-                <goals>
-                  <goal>start</goal>
-                </goals>
-                <configuration>
-                  <autoPull>always</autoPull>
-                  <images>
-                    <image>
-                      <name>${test.dockerfile.base.image}</name>
-                      <alias>${docker.container.name}</alias>
-                      <run>
-                        <platform>linux/amd64</platform>
-                        <containerNamePattern>${docker.container.name}</containerNamePattern>
-                        <ports>
-                          <port>9008:9008</port>
-                        </ports>
-                        <wait>
-                          <log>.*Synapse unit testing agent has been established on port 9008.*</log>
-                          <time>100000</time>
-                          <shutdown>100000</shutdown>
-                        </wait>
-                        <cmd>-DsynapseTest -DsynapseTestPort=9008</cmd>
-                        <volumes>
-                          <bind>
-                            <volume>${basedir}/deployment/libs:/home/wso2carbon/wso2mi-4.3.0/lib</volume>
-                          </bind>
-                        </volumes>
-                      </run>
-                    </image>
-                  </images>
-                  <authConfig>
-                    <username>${dockerfile.pull.username}</username>
-                    <password>${dockerfile.pull.password}</password>
-                  </authConfig>
-                  <skip>${maven.test.skip}</skip>
-                  <maven.test.failure.ignore>true</maven.test.failure.ignore>
-                </configuration>
-              </execution>
-              <execution>
-                <id>docker-stop</id>
-                <phase>post-integration-test</phase>
-                <goals>
-                  <goal>stop</goal>
-                </goals>
-                <configuration>
-                  <images>
-                    <image>
-                      <name>${docker.container.name}</name>
-                    </image>
-                  </images>
-                  <authConfig>
-                    <username>${dockerfile.pull.username}</username>
-                    <password>${dockerfile.pull.password}</password>
-                  </authConfig>
-                  <skip>${maven.test.skip}</skip>
-                </configuration>
-              </execution>
             </executions>
             <configuration/>
           </plugin>
         </plugins>
       </build>
       <properties>
-        <server.type>remote</server.type>
+        <server.type>local</server.type>
         <server.host>localhost</server.host>
         <server.port>9008</server.port>
-      </properties>
-    </profile>
-    <profile>
-      <id>test</id>
-      <build/>
-      <properties>
-        <server.type>${testServerType}</server.type>
-        <server.host>${testServerHost}</server.host>
-        <server.port>${testServerPort}</server.port>
-        <server.port>${testServerPath}</server.port>
+        <server.path>/</server.path>
+        <server.version>${project.runtime.version}</server.version>
+        <server.download.link>${testServerDownloadLink}</server.download.link>
       </properties>
     </profile>
   </profiles>
@@ -438,7 +334,7 @@
       <plugin>
         <groupId>org.wso2.maven</groupId>
         <artifactId>synapse-unit-test-maven-plugin</artifactId>
-        <version>5.2.65</version>
+        <version>5.2.70</version>
         <executions>
           <execution>
             <id>synapse-unit-test</id>
@@ -454,6 +350,8 @@
             <testServerHost>${server.host}</testServerHost>
             <testServerPort>${server.port}</testServerPort>
             <testServerPath>${server.path}</testServerPath>
+            <testServerVersion>${server.version}</testServerVersion>
+            <testServerDownloadLink>${server.download.link}</testServerDownloadLink>
           </server>
           <testCasesFilePath>${project.basedir}/src/test/wso2mi/${testFile}</testCasesFilePath>
           <mavenTestSkip>${maven.test.skip}</mavenTestSkip>
@@ -462,24 +360,18 @@
     </plugins>
   </build>
   <properties>
-    <mainSequence>MainSequence</mainSequence> 
     <projectType>integration-project</projectType>
-    <uuid>cc76a9cb-fae7-4194-ac30-ab59832f6c43</uuid>
+    <uuid>f7eb650a-5107-46a4-acea-6234e03b1092</uuid>
     <!-- <archiveLocation>configure a custom target directory for CAPP</archiveLocation> -->
     <keystore.type>JKS</keystore.type>
     <keystore.name>wso2carbon.jks</keystore.name>
     <keystore.password>wso2carbon</keystore.password>
     <keystore.alias>wso2carbon</keystore.alias>
     <ciphertool.enable>true</ciphertool.enable>
-    <dockerfile.base.image>wso2/wso2mi:4.3.0</dockerfile.base.image>
-    <test.dockerfile.base.image>wso2/wso2mi:4.2.0</test.dockerfile.base.image>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.scm.id>integration-project</project.scm.id>
     <project.runtime.version>4.3.0</project.runtime.version>
-    <docker.container.name>wso2-mi-container</docker.container.name>
-    <local.mi.pack.store.path>${basedir}/src/test/resources/product</local.mi.pack.store.path>
-    <mi.pack.download.link>https://github.com/wso2/micro-integrator/releases/download/v4.3.0/wso2mi-4.3.0.zip</mi.pack.download.link>
-    <mi.pack>wso2mi-4.3.0</mi.pack>
+    <dockerfile.base.image>wso2/wso2mi:${project.runtime.version}</dockerfile.base.image>
   </properties>
 </project>
