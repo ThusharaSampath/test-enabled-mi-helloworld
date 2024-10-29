@@ -2,4 +2,4 @@
 /target
 *.log
 ?
-*DS_Store
+Dockerfile

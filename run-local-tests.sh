@@ -12,12 +12,12 @@ NC='\033[0m' # No Color
 echo -e "${GREEN}Setting up test environment...${NC}"
 
 # Create directories
-mkdir -p volume/wso2mi/wso2mi-4.3.0
+mkdir -p volume/wso2mi/wso2mi-4.3.0.0
 
 # Copy WSO2 MI pack
 echo -e "${GREEN}Copying WSO2 MI pack...${NC}"
 if [ -d "$WSO2_MI_PATH" ]; then
-    cp -r $WSO2_MI_PATH/* volume/wso2mi/wso2mi-4.3.0
+    cp -r $WSO2_MI_PATH/* volume/wso2mi/wso2mi-4.3.0.0
     # chmod +x wso2mi/bin/micro-integrator.sh
 else
     echo -e "${RED}Error: WSO2 MI pack not found at $WSO2_MI_PATH${NC}"
@@ -33,6 +33,7 @@ echo -e "${GREEN}Running tests...${NC}"
 docker run --rm \
     -v "$(pwd)":/app \
     -v ~/.m2/repository:/app/?/.m2/repository:rw \
+    -e TEST_SERVER_PATH=/app/volume/wso2mi/wso2mi-4.3.0.0/bin/micro-integrator.sh \
     $IMAGE_NAME
 
 # Check exit status

@@ -29,12 +29,12 @@ RUN apt-get update && \
 # Set working directory
 WORKDIR /app
 
-ENV TEST_SERVER_PATH=""
+# Copy entrypoint script to the container
+COPY scripts/entrypoint.sh /scpt/entrypoint.sh
 
-# set user
-# USER 10015
+RUN chmod +x /scpt/entrypoint.sh
 
-ENTRYPOINT ["sh", "-c", "mvn clean install -Ptest -DtestServerType=local -DtestServerHost=localhost -DtestServerPort=9008 -DtestServerPath=${TEST_SERVER_PATH}"]
+ENTRYPOINT [ "/scpt/entrypoint.sh" ]
 EOF
 
 # Build Docker image
