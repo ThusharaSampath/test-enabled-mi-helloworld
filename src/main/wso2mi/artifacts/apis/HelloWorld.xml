@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <api context="/HelloWorld" name="HelloWorld" xmlns="http://ws.apache.org/ns/synapse">
-    <resource methods="GET">
+    <resource methods="POST">
         <inSequence>
-            <payloadFactory media-type="json">
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="inputPayload" type="property"/>
+            </enrich>
+            <log level="custom">
+                <property expression="$ctx:inputPayload" name="LOG-ATOMFEED-API-RECEIVED-PAYLOAD"/>
+            </log>
+            <payloadFactory media-type="jsonerror">
                 <format>{"Hello":"World"}</format>
                 <args/>
             </payloadFactory>
