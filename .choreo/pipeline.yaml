@@ -1,0 +1,20 @@
+steps:
+  - name: Entry Step
+    template: entry-temp
+  - name: Build Preparation
+    template: choreo/build-preparation@v1
+  - name: Vulnerability Scan
+    template: choreo/mi-trivy-scan@v1
+  - name: Integration Project Build
+    template: choreo/integration-project-build@v1
+  - name: Exit Step
+    template: exit-temp
+templates:
+  - name: entry-temp
+    inlineScript: |
+      #!/bin/bash
+      echo "Entering to the workflow"
+  - name: exit-temp
+    inlineScript: |
+      #!/bin/bash
+      echo "Exiting from the workflow"
