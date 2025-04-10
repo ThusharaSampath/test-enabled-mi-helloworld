@@ -16,7 +16,7 @@
       <assertions>
         <assertEquals>
           <actual>$body</actual>
-          <expected>{&quot;Hell&quot;:&quot;World&quot;}</expected>
+          <expected>{&quot;Hello&quot;:&quot;World&quot;}</expected>
           <message>Actual payload is not equals to the expected value</message>
         </assertEquals>
       </assertions>
